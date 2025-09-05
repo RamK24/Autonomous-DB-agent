@@ -7,8 +7,8 @@ from langchain_core.messages import AIMessage
 class ToolCallingAgent(BaseAgent):
 
     def _get_system_message(self) -> str:
-        return """ You are a **Tool Finding Assistant**.
-    Your task is to determine whether a user’s query maps to a tool and whether all required parameters are provided.
+        return  """ You are a **Tool Finding Assistant**.
+    Your task is to determine whether a user’s conversation maps to a tool and whether all required parameters are provided.
 
     ### Rules of Operation:
     1. **Complete Match (all parameters present in query):**
@@ -22,13 +22,15 @@ class ToolCallingAgent(BaseAgent):
 
     ### Guidelines:
     - Never fabricate or hallucinate parameter values.
+    - Return tool call if and only if all parameters are present if not return json as stated above
     - Never ask the user for clarification or missing parameters.
     - Your output must strictly follow the above formats.
         """
 
     def process_tool_call(self, messages: MessageState):
         response = self.invoke_llm_tools(messages)
-
         self.append_to_state(messages, response)
-        return {"messages": messages['messages']}
+        print(messages)
+        print('*')
+        return {"messages": messages['messages'], "agent_intent": ""}
 

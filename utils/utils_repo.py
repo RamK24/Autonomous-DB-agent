@@ -7,13 +7,13 @@ from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, Tool
 
 DB_name = "jira_ticketing.db"
 MODEL_ID = "qwen3:14b"
-INTENTS = ["tool_call", "END"]
+INTENTS = ["tool_call"]
 TOOLS = [create_user, create_ticket, view_ticket]
 
 
 llm = ChatOllama(
     model=MODEL_ID,
-    temperature=0.1, verbose=True
+    temperature=0
 )
 llm_tools = llm.bind_tools(TOOLS)
 
@@ -21,6 +21,7 @@ llm_tools = llm.bind_tools(TOOLS)
 class MessageState(TypedDict):
     messages: Annotated[List[Union[HumanMessage, AIMessage, SystemMessage, ToolMessage]], add_messages]
     intent: str
+    agent_intent: str
 
 
 
